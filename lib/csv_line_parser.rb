@@ -17,7 +17,7 @@ module CsvLineParser
         next unless @line.has_key?(association[:name].to_sym) # no point going further if the hash does not has the key!
         values = @line.delete(association[:name].to_sym)
         values_arr = []
-        values.split(',').each do |value|
+        values.to_s.split(',').each do |value|
           values_arr << {association[:data].to_sym => value.strip}
         end
         hashed_line = hashed_line.merge({association[:name].to_sym => values_arr})

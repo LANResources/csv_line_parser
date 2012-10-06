@@ -43,6 +43,12 @@ describe CsvLineParser::Parser do
       @row = {name: "chandresh"}
       CsvLineParser::Parser.new(@row, @model_name, @association_array).process.should == {prospect: [{name: "chandresh"}]}
     end
+    it "it does not give errors if a row is passed with nil association data" do
+      @row = {name: "chandresh", notes: nil}
+      @association_array = [{name: "categories", data: "name"}, {name: "notes", data: "body"}]
+      CsvLineParser::Parser.new(@row, @model_name, @association_array).process.should == {prospect: [{name: "chandresh"}],
+                                                                                                    notes: []}
+    end
 
     it "Test with a larger sample" do
       @association_array = [{name: "categories", data: "name"}, {name: "tags", data: "name"}, {name: "reference", data: "name"}]
