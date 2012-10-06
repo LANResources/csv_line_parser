@@ -4,8 +4,8 @@ require File.expand_path('../lib/csv_line_parser/version', __FILE__)
 Gem::Specification.new do |gem|
   gem.authors       = ["Chandresh Pant"]
   gem.email         = ["cp@cpant.in"]
-  gem.description   = %q{TODO: Write a gem description}
-  gem.summary       = %q{TODO: Write a gem summary}
+  gem.description   = %q{Write a gem description}
+  gem.summary       = %q{Write a gem summary}
   gem.homepage      = ""
 
   gem.files         = `git ls-files`.split($\)
