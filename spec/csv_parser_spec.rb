@@ -9,6 +9,13 @@ describe CsvLineParser::Parser do
         {"name" => "prospect_name",
          "dummy" => "more_dummy"
         }
+    @combinations = [
+          {
+              "name" => "name",
+              "part1" => "first_name",
+              "part2" => "last_name"
+          }
+        ]
   end
 
   describe "#new" do
@@ -21,6 +28,14 @@ describe CsvLineParser::Parser do
     it "should replace column names as provided" do
       csv = CsvLineParser::Parser.new(@row, @model_name, [], @column_replacements)
       csv.process.should == {prospect: [{prospect_name: "chandresh", categories: "People"}]}
+    end
+  end
+
+  describe "#combine_column_names" do
+    it "should combine column names as provided" do
+      @row = {first_name: "chandresh", last_name: "pant", categories: "People"}
+      csv = CsvLineParser::Parser.new(@row, @model_name, [], [], @combinations)
+      csv.process.should == {prospect: [{name: "chandresh pant", categories: "People"}]}
     end
   end
 
@@ -43,6 +58,7 @@ describe CsvLineParser::Parser do
       @row = {name: "chandresh"}
       CsvLineParser::Parser.new(@row, @model_name, @association_array).process.should == {prospect: [{name: "chandresh"}]}
     end
+
     it "it does not give errors if a row is passed with nil association data" do
       @row = {name: "chandresh", notes: nil}
       @association_array = [{name: "categories", data: "name"}, {name: "notes", data: "body"}]

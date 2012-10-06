@@ -3,14 +3,16 @@ require "csv_line_parser/version"
 module CsvLineParser
   class Parser
 
-    def initialize(line, model_name, association_array=[], column_replacements=[])
+    def initialize(line, model_name, association_array=[], column_replacements=[], combinations=[])
       @line = line.dup
       @model_name = model_name
       @association_array = association_array
       @column_replacements = column_replacements
+      @combinations = combinations
     end
 
     def process
+      combine_columns
       replace_column_names
       hashed_line = {}
       @association_array.each do |association|
@@ -23,6 +25,15 @@ module CsvLineParser
         hashed_line = hashed_line.merge({association[:name].to_sym => values_arr})
       end
       hashed_line.merge({@model_name.to_sym => [@line]})
+    end
+
+    def combine_columns
+      @combinations.each do |combination|
+        part1 = @line.delete(combination["part1"].to_sym)
+        part2 = @line.delete(combination["part2"].to_sym)
+        combined_value = "#{part1.to_s} #{part2.to_s}"
+        @line = @line.merge({combination["name"].to_sym => combined_value})
+      end
     end
 
     def replace_column_names
