@@ -31,8 +31,9 @@ module CsvLineParser
       @combinations.each do |combination|
         part1 = @line.delete(combination["part1"].to_sym)
         part2 = @line.delete(combination["part2"].to_sym)
-        combined_value = "#{part1.to_s} #{part2.to_s}"
-        @line = @line.merge({combination["name"].to_sym => combined_value})
+        if (combined_value = [part1, part2].join(' ')).present?
+          @line = @line.merge({combination["name"].to_sym => combined_value})
+        end
       end
     end
 
